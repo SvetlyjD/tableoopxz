@@ -16,35 +16,32 @@ export class SignUp extends React.Component {
             password: this.state.password
         }
         // console.log(data);
-        try {
-            fetch("https://internsapi.public.osora.ru/api/auth/login", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8'
-                },
-                body: JSON.stringify(data)
-            })
-                .then(res => res.json())
-                .then((result) => {
-                    if (result.status == false) {
-                        if (result.errors.email) { alert(result.errors.email) }
-                    }
-                    if (result.status == false) {
-                        if (result.errors.password) { alert(result.errors.password) }
-                    }
-                    if (result.status == false) {
-                        if (result.status_code == 500) { alert("Пользователя с таким именем не существует") }
-                    }
-                    else {
-                        localStorage.setItem("token", result.data.access_token);
-                        window.location.assign("http://localhost:3000/");
-                    }
+
+        fetch("https://internsapi.public.osora.ru/api/auth/login", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(res => res.json())
+            .then((result) => {
+                if (result.status == false) {
+                    if (result.errors.email) { alert(result.errors.email) }
                 }
-                )
-        }
-        catch (error) {
-            console.log(error);
-        }
+                if (result.status == false) {
+                    if (result.errors.password) { alert(result.errors.password) }
+                }
+                if (result.status == false) {
+                    if (result.status_code == 500) { alert("Пользователя с таким именем не существует") }
+                }
+                else {
+                    localStorage.setItem("token", result.data.access_token);
+                    window.location.assign("http://localhost:3000/");
+                }
+            }
+            )
+            .catch((e) => alert(e.message))
     }
 
     render() {

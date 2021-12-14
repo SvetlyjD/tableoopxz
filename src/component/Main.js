@@ -22,23 +22,23 @@ export class Main extends React.Component {
         head.append('Content-Type', 'application/json;charset=utf-8');
         head.append("authorization", "Bearer " + this.state.token);
         // console.log(c)
-        try {
-            fetch("https://internsapi.public.osora.ru/api/game/play", {
-                method: "POST",
-                headers: head,
-                body: JSON.stringify(data)
-            }).then(res => res.json())
-                .then(result => {
-                    this.setState({ req: result });
-                    console.log(result);
-                    this.setState({ div: result.status }
-                    )
-                }
+
+        fetch("https://internsapi.public.osora.ru/api/game/play", {
+            method: "POST",
+            headers: head,
+            body: JSON.stringify(data)
+        }).then(res => res.json())
+            .then(result => {
+                this.setState({ req: result });
+                console.log(result);
+                this.setState({ div: result.status }
                 )
-        }
-        catch (error) {
-            console.log(error)
-        }
+            }
+            )
+            .catch((e) => { alert(e.message) })
+
+
+
     }
 
 
@@ -58,4 +58,5 @@ export class Main extends React.Component {
             </>
         )
     }
+    ////
 }

@@ -40,11 +40,12 @@ export default class TableTest extends React.Component {
             method: 'POST',
             headers: myHeaders,
             body: JSON.stringify(resSecond)
-        }).then(res => res.json()).then((result) => {
-            console.log(result);
-            this.setState({ req: result })
-            this.setState({ time: result.data.time });
-        });
+        }).then(res => res.json())
+            .then((result) => {
+                this.setState({ req: result })
+                this.setState({ time: result.data.time });
+            })
+            .catch((e) => alert(e.message));
     }
 
     clickButtonHandler1() {
@@ -63,30 +64,32 @@ export default class TableTest extends React.Component {
             body: JSON.stringify(resSecond)
         })
             .then(res => res.json())
-            .then(res => { console.log(res); this.setState({ req: res }); this.setState({ time: res.data.time }); })
+            .then(res => {
+                this.setState({ req: res });
+                this.setState({ time: res.data.time });
+                this.setState({ inputValue: "" })
+            })
+            .catch((e) => alert(e.message));
     }
 
-
-
     render() {
-        console.log(this.state.time);
         if (this.state.value == 1 && this.state.req.data.status != 1) {
-            if (this.state.time < 1) { this.clickButtonHandler(-5) }
             return (
                 <>
-
                     < Container >
                         <Card style={{ width: 600 }} className="p-5 mt-5">
                             <div>Ball: {this.state.req.data.points} </div>
                             <div>{this.state.req.data.question} </div>
-                            <div>Timer: {this.state.time} </div>
+                            <div>{this.state.time < 1
+                                ? <div>Time: 0</div>
+                                : <div>Time: {this.state.time}</div>
+                            }</div>
                             <div>{this.state.req.data.options.map((item, index) =>
                                 <Button key={index} data-key={item} className="mx-2"
-                                    onClick={(e) => { this.clickButtonHandler(e.target.dataset.key) }            //
+                                    onClick={(e) => { this.clickButtonHandler(e.target.dataset.key) }
                                     }>{item}</Button>)} </div>
                         </Card>
                     </Container>
-
                 </>
             )
         }
@@ -96,9 +99,12 @@ export default class TableTest extends React.Component {
                     <Card style={{ width: 600 }} className="p-5 mt-5">
                         <div>Ball: {this.state.req.data.points} </div>
                         <div>{this.state.req.data.question} </div>
-                        <div>Time: {this.state.time} </div>
+                        <div>{this.state.time < 1
+                            ? <div>Time: 0</div>
+                            : <div>Time: {this.state.time}</div>
+                        }</div>
                         <input type="text" value={this.state.inputValue} onChange={(e) => this.setState({ inputValue: e.target.value })} />
-                        <Button onClick={(e) => this.clickButtonHandler1()}>Next</Button>
+                        <Button className="mt-2" onClick={(e) => this.clickButtonHandler1()}>Next</Button>
                     </Card>
                 </Container>
             )
